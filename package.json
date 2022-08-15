@@ -2,7 +2,7 @@
   "name": "diygw-electron",
   "private": true,
   "main": "dist_electron/main.js",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "scripts": {
     "dev": "yarn tsc:electron && concurrently vite \" yarn electron .\"  ",
     "build": "yarn tsc:electron && vue-tsc --noEmit && vite build && electron-builder",
