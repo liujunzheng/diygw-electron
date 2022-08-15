@@ -1,20 +1,7 @@
 version: 1.0.{build}
 environment:
-  GH_TOKEN: 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
+  GH_TOKEN: 4ALRST0KFvOQW8JdrBDzIMchPxQoUZemTwstvyFEj0H89/UdN0x2OgwLDn7IyUTF
 install:
 - ps: yarn
 build_script:
 - ps: yarn build
-on_success:
-- ps: >-
-    git config --global credential.helper store
-
-    Set-Content -Path "$HOME\.git-credentials" -Value "https://$($env:access_token):x-oauth-basic@github.com`n" -NoNewline
-
-    git config --global user.email "280160522@qq.com"
-
-    git config --global user.name "html580"
-
-    git commit ...
-
-    git push ...
