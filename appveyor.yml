@@ -1,7 +1,4 @@
 version: 1.0.{build}
-environment:
-  GH_TOKEN: 
-    secure: 4ALRST0KFvOQW8JdrBDzIMchPxQoUZemTwstvyFEj0H89/UdN0x2OgwLDn7IyUTF
 install:
 - ps: yarn
 build_script:
