@@ -24,10 +24,7 @@
     ],
     "publish": {
       "provider": "github",
-      "repo": "diygw-electron",
-      "owner": "diygw",
-      "releaseType": "release",
-      "private": false
+      "releaseType": "release"
     },
     "nsis": {
       "allowToChangeInstallationDirectory": true,
