@@ -6,4 +6,9 @@ environment:
 install:
 - ps: yarn
 build_script:
-- ps: yarn build
+- ps: >-
+    git config --global credential.helper store
+
+    Add-Content "$env:USERPROFILE.git-credentials" "https://$($env:access_token):x-oauth-basic@github.com`n"
+
+    yarn build
