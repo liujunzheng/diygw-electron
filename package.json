@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "yarn tsc:electron && concurrently vite \" yarn electron .\"  ",
     "build": "yarn tsc:electron && vue-tsc --noEmit && vite build && electron-builder",
-    "tsc:electron": "tsc -p electron --outDir dist_electron"
+    "tsc:electron": "tsc -p electron --outDir dist_electron",
+    "release": "yarn tsc:electron && vue-tsc --noEmit && vite build && electron-builder"
   },
   "build": {
     "appId": "com.diygw.electron",
