@@ -1,30 +1,9 @@
 version: 1.0.{build}
-
-branches:
-  only:
-    - master
-
-image: Visual Studio 2019
-platform:
-  - x64
-
-cache:
-  - node_modules
-  - '%APPDATA%\npm-cache'
-  - '%USERPROFILE%\.electron'
-  - '%USERPROFILE%\AppData\Local\Yarn\cache'
-
 init:
-  - git config --global core.autocrlf input
-
+- ps: git config --global core.autocrlf input
+environment:
+  GH_TOKEN: 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
 install:
-  - ps: Install-Product node 12 x64
-  - git reset --hard HEAD
-  - yarn
-  - node --version
-
+- ps: yarn
 build_script:
-  - yarn build
-  - npm run release
-
-test: off
+- ps: yarn build

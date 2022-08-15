@@ -2,12 +2,11 @@
   "name": "diygw-electron",
   "private": true,
   "main": "dist_electron/main.js",
-  "version": "1.0.0",
+  "version": "1.0.9",
   "scripts": {
     "dev": "yarn tsc:electron && concurrently vite \" yarn electron .\"  ",
     "build": "yarn tsc:electron && vue-tsc --noEmit && vite build && electron-builder",
-    "tsc:electron": "tsc -p electron --outDir dist_electron",
-    "release": "yarn tsc:electron && vue-tsc --noEmit && vite build && electron-builder"
+    "tsc:electron": "tsc -p electron --outDir dist_electron"
   },
   "build": {
     "appId": "com.diygw.electron",
