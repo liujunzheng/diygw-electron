@@ -2,7 +2,7 @@ version: 1.0.{build}
 init:
 - ps: git config --global core.autocrlf input
 environment:
-  DIYGW_TOKEN: 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
+  GH_TOKEN: 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
 install:
 - ps: yarn
 build_script:
