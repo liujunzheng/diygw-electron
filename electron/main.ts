@@ -15,9 +15,9 @@ const mainMenu = new MainMenu([
     {
         label: '刷新',
         accelerator: 'F5',
-        click: () => {
-            reloadPage(mainWin)
-        }
+        // click: () => {
+        //     reloadPage(mainWin)
+        // }
     },
     {
         label: '浏览器调试',
@@ -117,6 +117,7 @@ ipcMain.on('diygw-open-uniapp', function (event: any, config: any) {
     if (url.indexOf('#') > 0) {
       url = url.substring(0, url.indexOf('#'))
     }
+    console.log(url + '#/pages/' + config.page)
     uniappwin.loadURL(url + '#/pages/' + config.page)
     uniappwin.on('closed', () => {
       uniappwin = null
@@ -187,7 +188,6 @@ ipcMain.on('diygw-down-file', async (event, {url}) => {
 });
 
 
-
 // 获取当前源码配置的目录
 ipcMain.handle('diygw-save-code', async (event: any, config: any) => {
   const data = <any>dbconfig.get(config.id)
@@ -198,8 +198,7 @@ ipcMain.handle('diygw-save-code', async (event: any, config: any) => {
       const pagefile = projectpath + config.data.path + '.vue'
       //保存页面代码
       fse.outputFileSync(pagefile, config['code']['htmlValue'])
-
-       //设置新页面配置代码
+      //获取页面配置代码
       const pageConfig = data[config.code.type] + '/pages.json'
       const configData = fse.readJSONSync(pageConfig)
       const index = configData.pages.findIndex((item: any) => {
@@ -215,8 +214,7 @@ ipcMain.handle('diygw-save-code', async (event: any, config: any) => {
         configData.pages.push(JSON.parse(config['code']['jsonValue']))
       }
       fse.outputFileSync(pageConfig, JSON.stringify(configData, undefined, 4))
-
-    } else if (config.code.type === 'ht') {
+    } else if (config.code.type === 'h5') {
       const projectpath = data[config.code.type]
       const pagefile = projectpath + config.data.path + '.html'
       fse.outputFileSync(pagefile, config['code']['htmlValue'])
@@ -254,7 +252,6 @@ ipcMain.handle('diygw-save-code', async (event: any, config: any) => {
       const jsonpagefile = projectpath + config.data.path + '.json'
       fse.outputFileSync(jsonpagefile, config['code']['jsonValue'])
 
-
       //设置新页面配置代码
       const pageConfig = data[config.code.type] + '/app.json'
       const configData = fse.readJSONSync(pageConfig)
@@ -262,11 +259,7 @@ ipcMain.handle('diygw-save-code', async (event: any, config: any) => {
         return item === 'pages/' + config.data.path
       })
       if (index >= 0) {
-        configData.pages.splice(
-          index,
-          1,
-          'pages/' + config.data.path
-        )
+        configData.pages.splice(index, 1, 'pages/' + config.data.path)
       } else {
         configData.pages.push('pages/' + config.data.path)
       }
@@ -274,5 +267,3 @@ ipcMain.handle('diygw-save-code', async (event: any, config: any) => {
     }
   }
 })
-
-
