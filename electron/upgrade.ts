@@ -17,7 +17,7 @@ export function upgradeHandle(window: any, feedUrl: any) {
   mainWindow = window
   autoUpdater.autoDownload = false //true 自动升级 false 手动升级
   //设置更新包的地址
-  autoUpdater.setFeedURL(feedUrl)
+  // autoUpdater.setFeedURL(feedUrl)
 
   //监听升级失败事件
   autoUpdater.on('error', function (message: any) {
