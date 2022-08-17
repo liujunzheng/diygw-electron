@@ -65,8 +65,8 @@ app.on('ready', () => {
     // } else {
     //     mainWin.loadURL('https://www.diygw.com')
     // }
-    mainWin.loadURL('http://localhost:9091')  
-    // mainWin.loadURL('https://www.diygw.com')  
+    // mainWin.loadURL('http://localhost:9091')  
+    mainWin.loadURL('https://www.diygw.com')  
 
     mainWin.once('ready-to-show', ()=>{
         mainWin && mainWin.show() 
