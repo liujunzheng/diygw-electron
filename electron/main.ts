@@ -1,4 +1,4 @@
-import {app, BrowserWindow, screen, ipcMain, dialog,shell } from 'electron'
+import {app, BrowserWindow, screen, ipcMain, dialog} from 'electron'
 import {MainMenu} from './menu'
 import path from 'path'
 import { info, reloadPage } from './utils'
@@ -14,9 +14,11 @@ let mainWin:BrowserWindow | null
 const mainMenu = new MainMenu([
     {
         label: '刷新',
-        accelerator: 'F5',
+        role: 'forceReload',
+        accelerator: 'F5'
         // click: () => {
-        //     reloadPage(mainWin)
+        //   app.getCu
+        //     reloadPage(app.getCurrentActivityType)
         // }
     },
     {
@@ -63,8 +65,8 @@ app.on('ready', () => {
     // } else {
     //     mainWin.loadURL('https://www.diygw.com')
     // }
-
-    mainWin.loadURL('https://www.diygw.com')  
+    mainWin.loadURL('http://localhost:9091')  
+    // mainWin.loadURL('https://www.diygw.com')  
 
     mainWin.once('ready-to-show', ()=>{
         mainWin && mainWin.show() 
@@ -108,20 +110,22 @@ let uniappwin:BrowserWindow | null
 ipcMain.on('diygw-open-uniapp', function (event: any, config: any) {
   const data: any = dbconfig.get(config.id)
   if (data.url) {
-    uniappwin = new BrowserWindow({
-      width: 380,
-      height: 680,
-      center: true
-    })
+    if(!uniappwin){
+      uniappwin = new BrowserWindow({
+        width: config.width||388,
+        height: config.height||680,
+        center: true
+      })
+      uniappwin.on('closed', () => {
+        uniappwin = null
+      })
+    }
     let url = data.url
     if (url.indexOf('#') > 0) {
       url = url.substring(0, url.indexOf('#'))
     }
-    console.log(url + '#/pages/' + config.page)
     uniappwin.loadURL(url + '#/pages/' + config.page)
-    uniappwin.on('closed', () => {
-      uniappwin = null
-    })
+    uniappwin.setAlwaysOnTop(true,'floating')
   } else {
     dialog.showMessageBox({
       type: 'warning',
@@ -130,6 +134,27 @@ ipcMain.on('diygw-open-uniapp', function (event: any, config: any) {
       message: '请先配置本地调试地址',
       noLink: true
     })
+  }
+})
+
+
+// 切换页面刷新页面
+ipcMain.on('diygw-change-uniapp', function (event: any, config: any) {
+  const data: any = dbconfig.get(config.id)
+  if (data.url && uniappwin) {
+    const projectpath = data['uniapp'] + '/pages/'
+    const pagefile = projectpath + config.page + '.vue'
+    if (!fse.existsSync(pagefile)) {
+      //给渲染进程发送消息
+      mainWin?.webContents.send('message', { cmd: 'no-file-exist' })
+      return
+    }
+    let url = data.url
+    if (url.indexOf('#') > 0) {
+      url = url.substring(0, url.indexOf('#'))
+    }
+    uniappwin.loadURL(url + '#/pages/' + config.page)
+    uniappwin.setAlwaysOnTop(true,'floating')
   }
 })
 

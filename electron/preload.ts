@@ -10,7 +10,8 @@ window.addEventListener('DOMContentLoaded', () => {
 })
 
 import { contextBridge, ipcRenderer } from 'electron'
-contextBridge.exposeInMainWorld('electron', { ipcRenderer })
+
+contextBridge.exposeInMainWorld('electron', { ipcRenderer:{ ...ipcRenderer, on: ipcRenderer.on.bind(ipcRenderer) }  })
 
 // contextBridge.exposeInMainWorld('ipcRenderer', {
 //     send: <T>(channel:string, data:T)=> {
