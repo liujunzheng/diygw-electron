@@ -1114,6 +1114,15 @@ duplexer3@^0.1.4:
   resolved "https://registry.npmmirror.com/duplexer3/-/duplexer3-0.1.5.tgz#0b5e4d7bad5de8901ea4440624c8e1d20099217e"
   integrity sha512-1A8za6ws41LQgv9HrE/66jyC5yuSjQ3L/KOpFtoBilsAK2iA2wuS5rTt1OCzIvtS2V7nVmedsUU+DGRcjBmOYA==
 
+einf@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/einf/-/einf-1.0.0.tgz#9540467aedd384e6481737e0d78befb6855be323"
+  integrity sha512-dGesSFAHBAL3mTK51gUN8P+wTfgvATUXz1TDybRMfPiE1t/KwRBZhXozDXAw8pnDh5CySKUGPLZpAuUZfyHFlA==
+  dependencies:
+    check-package-exists "^1.1.0"
+    colorette "^2.0.19"
+    reflect-metadata "^0.1.13"
+
 ejs@^3.1.7:
   version "3.1.8"
   resolved "https://registry.npmmirror.com/ejs/-/ejs-3.1.8.tgz#758d32910c78047585c7ef1f92f9ee041c1c190b"
@@ -2600,6 +2609,11 @@ readdirp@~3.6.0:
   integrity sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==
   dependencies:
     picomatch "^2.2.1"
+
+reflect-metadata@^0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
+  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
 
 registry-auth-token@^4.0.0:
   version "4.2.2"
