@@ -1,48 +1,14 @@
 {
   "name": "diygw-electron",
   "private": true,
-  "main": "dist_electron/main.js",
+  "author": "DIYGW",
+  "description": "DIYGW Desktop Client",
+  "main": "dist/main/index.js",
   "version": "1.0.0",
   "scripts": {
-    "dev": "yarn tsc:electron && concurrently vite \" yarn electron .\"  ",
-    "build": "yarn tsc:electron && vue-tsc --noEmit && vite build && electron-builder",
-    "tsc:electron": "tsc -p electron --outDir dist_electron",
-    "release": "yarn tsc:electron && vue-tsc --noEmit && vite build && electron-builder"
-  },
-  "build": {
-    "asar": false,
-    "appId": "com.diygw.electron",
-    "productName": "DIY可视化",
-    "copyright": "Copyright © 2022 diygw",
-    "directories": {
-      "output": "dist_electron",
-      "buildResources": "public"
-    },
-    "files": [
-      "dist_electron/**/*",
-      "public/**/*",
-      "dist/**/*"
-    ],
-    "nsis": {
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "DIYGW可视化",
-      "perMachine": true,
-      "oneClick": false
-    },
-    "mac": {
-      "icon": "public/icon.icns",
-      "artifactName": "diygw-macos-${version}.${ext}"
-    },
-    "win": {
-      "icon": "public/icon.ico",
-      "artifactName": "diygw-windows-${version}.${ext}"
-    },
-    "linux": {
-      "icon": "public/icon.icns",
-      "artifactName": "diygw-linux-${version}.${ext}"
-    }
+    "dev": "rimraf dist && vite",
+    "build": "rimraf dist && vite build",
+    "release": "yarn build"
   },
   "dependencies": {
     "electron-dl": "^3.3.1",
@@ -58,8 +24,10 @@
     "electron-builder": "^23.1.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-updater": "^5.2.1",
+    "rimraf": "^3.0.2",
     "typescript": "^4.5.4",
     "vite": "^2.9.9",
+    "vite-plugin-doubleshot": "0.1.0-beta.2",
     "vite-plugin-electron": "^0.7.5",
     "vue-tsc": "^0.34.7"
   }

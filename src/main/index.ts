@@ -1,119 +1,127 @@
-import {app, BrowserWindow, screen, ipcMain, dialog} from 'electron'
-import {MainMenu} from './menu'
+import { app, BrowserWindow, screen, ipcMain, dialog } from 'electron'
+import { MainMenu } from './menu'
 import path from 'path'
 import { info, reloadPage } from './utils'
 import { factory } from 'electron-json-config'
 import fs from 'fs'
-import {download} from 'electron-dl';
+import { download } from 'electron-dl';
 import fse from 'fs-extra'
+import { join } from "path"
+
+const isDev = !app.isPackaged
 
 //主窗口
-let mainWin:BrowserWindow | null
+let mainWin: BrowserWindow | null
 
 //顶部菜单
 const mainMenu = new MainMenu([
-    {
-        label: '刷新',
-        role: 'forceReload',
-        accelerator: 'F5'
-        // click: () => {
-        //   app.getCu
-        //     reloadPage(app.getCurrentActivityType)
-        // }
-    },
-    {
-        label: '浏览器调试',
-        accelerator: 'F12',
-        role: 'toggleDevTools'
-    },
-    {
-        label: "关于",
-        accelerator: 'F10',
-        click: () => {
-            info()
-        }
-    },
-    {
-        label: "退出",
-        click: () => {
-            app.quit()
-        }
+  {
+    label: '刷新',
+    role: 'forceReload',
+    accelerator: 'F5'
+    // click: () => {
+    //   app.getCu
+    //     reloadPage(app.getCurrentActivityType)
+    // }
+  },
+  {
+    label: '浏览器调试',
+    accelerator: 'F12',
+    role: 'toggleDevTools'
+  },
+  {
+    label: "关于",
+    accelerator: 'F10',
+    click: () => {
+      info()
     }
+  },
+  {
+    label: "退出",
+    click: () => {
+      app.quit()
+    }
+  }
 ])
 
 
 app.on('ready', () => {
-    mainMenu.createMainMenu()
- 
+  mainMenu.createMainMenu()
 
-    const {width,height} = screen.getPrimaryDisplay().workAreaSize
 
-    mainWin = new BrowserWindow({
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+
+  mainWin = new BrowserWindow({
+    width: width,
+    height: height,
+    show: false,
+    webPreferences: {
+      webSecurity: false, //解决跨域
+      // contextIsolation:false,
+      preload: path.join(__dirname, '../preload/index.js')
+    }
+  })
+
+  // if (process.env.npm_lifecycle_event == 'electron') {
+  //     mainWin.loadURL('http://localhost:3000')  
+  //     //mainWin.loadURL('https://www.diygw.com')  
+  // } else {
+  //     mainWin.loadURL('https://www.diygw.com')
+  // }
+
+  const URL = isDev
+    ? process.env.DS_RENDERER_URL
+    : `file://${join(app.getAppPath(), 'dist/renderer/index.html')}`
+
+  mainWin.loadURL(URL)
+  // mainWin.loadURL('https://www.diygw.com')  
+
+  mainWin.once('ready-to-show', () => {
+    mainWin && mainWin.show()
+    mainWin?.maximize()
+  })
+
+
+
+  mainWin.on('close', () => {
+    mainWin = null
+  })
+
+  mainWin.webContents.setWindowOpenHandler(data => {
+    return {
+      action: "allow", overrideBrowserWindowOptions: {
         width: width,
         height: height,
-        show: false,
         webPreferences: {
-            webSecurity: false, //解决跨域
-            // contextIsolation:false,
-            preload: path.join(__dirname,'preload.js')
+          webSecurity: false, //解决跨域
+          preload: path.join(__dirname, 'preload.js')
+          // contextIsolation: false,
+          // nodeIntegration: true
         }
-    })
-
-    // if (process.env.npm_lifecycle_event == 'electron') {
-    //     mainWin.loadURL('http://localhost:3000')  
-    //     //mainWin.loadURL('https://www.diygw.com')  
-    // } else {
-    //     mainWin.loadURL('https://www.diygw.com')
-    // }
-    mainWin.loadURL('http://localhost:9091')  
-    // mainWin.loadURL('https://www.diygw.com')  
-
-    mainWin.once('ready-to-show', ()=>{
-        mainWin && mainWin.show() 
-        mainWin?.maximize()
-    })
-
-
-
-    mainWin.on('close', () => {
-        mainWin = null
-    })
-
-    mainWin.webContents.setWindowOpenHandler(data =>{
-        return {
-            action: "allow", overrideBrowserWindowOptions: {
-                width: width,
-                height: height,
-                webPreferences: {
-                    webSecurity: false, //解决跨域
-                    preload: path.join(__dirname,'preload.js')
-                    // contextIsolation: false,
-                    // nodeIntegration: true
-                }
-            }
-        };
-    });
+      }
+    };
+  });
 })
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
 })
 
 //设置全局配置文件 
 const dbconfig = factory()
 
 //打开uniapp调试窗口
-let uniappwin:BrowserWindow | null
+let uniappwin: BrowserWindow | null
 // //是否重新加载窗口
 ipcMain.on('diygw-open-uniapp', function (event: any, config: any) {
   const data: any = dbconfig.get(config.id)
   if (data.url) {
-    if(!uniappwin){
+    if (!uniappwin) {
       uniappwin = new BrowserWindow({
-        width: config.width||388,
-        height: config.height||680,
+        width: config.width || 388,
+        height: config.height || 680,
         center: true
       })
       uniappwin.on('closed', () => {
@@ -125,7 +133,7 @@ ipcMain.on('diygw-open-uniapp', function (event: any, config: any) {
       url = url.substring(0, url.indexOf('#'))
     }
     uniappwin.loadURL(url + '#/pages/' + config.page)
-    uniappwin.setAlwaysOnTop(true,'floating')
+    uniappwin.setAlwaysOnTop(true, 'floating')
   } else {
     dialog.showMessageBox({
       type: 'warning',
@@ -154,7 +162,7 @@ ipcMain.on('diygw-change-uniapp', function (event: any, config: any) {
       url = url.substring(0, url.indexOf('#'))
     }
     uniappwin.loadURL(url + '#/pages/' + config.page)
-    uniappwin.setAlwaysOnTop(true,'floating')
+    uniappwin.setAlwaysOnTop(true, 'floating')
   }
 })
 
@@ -166,7 +174,7 @@ ipcMain.handle('diygw-get-config', async (event: any, id) => {
 
 
 // 获取当前源码配置的目录
-ipcMain.handle('diygw-select-dir', async (event: any, config:any) => {
+ipcMain.handle('diygw-select-dir', async (event: any, config: any) => {
   const filePaths = dialog.showOpenDialogSync({
     properties: ['openDirectory', 'createDirectory']
   })
@@ -174,7 +182,7 @@ ipcMain.handle('diygw-select-dir', async (event: any, config:any) => {
     return null
   }
   //判断是否移动端配置,如果非移动端的都直接返回
-  if(config.mobile){
+  if (config.mobile) {
     if (config.type === 'uniapp') {
       const pagefile = filePaths[0] + '/pages.json'
       if (fs.existsSync(pagefile)) {
@@ -192,12 +200,12 @@ ipcMain.handle('diygw-select-dir', async (event: any, config:any) => {
         return 'error'
       }
     }
-  }else{
+  } else {
     return filePaths[0]
   }
 })
 
- 
+
 // 设置配置
 ipcMain.handle('diygw-set-config', async (event: any, config: any) => {
   dbconfig.set(config.id, config)
@@ -205,11 +213,11 @@ ipcMain.handle('diygw-set-config', async (event: any, config: any) => {
 })
 
 // 下载文件
-ipcMain.on('diygw-down-file', async (event, {url}) => {
-    const win:any = BrowserWindow.getFocusedWindow();
-    await download(win, url,{
-        saveAs:true
-    });
+ipcMain.on('diygw-down-file', async (event, { url }) => {
+  const win: any = BrowserWindow.getFocusedWindow();
+  await download(win, url, {
+    saveAs: true
+  });
 });
 
 
