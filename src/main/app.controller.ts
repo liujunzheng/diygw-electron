@@ -6,6 +6,8 @@ import { download } from 'electron-dl';
 
 @Controller()
 export class AppController {
+  private version:String = process.env.VERSION
+
   private dbConfig: JsonConf
   private uniappWin: BrowserWindow | null = null
 
@@ -218,5 +220,13 @@ export class AppController {
         fse.outputFileSync(pageConfig, JSON.stringify(configData, undefined, 4))
       }
     }
+  }
+
+   /**
+  * 设置配置
+  */
+  @IpcHandle('diygw-get-version')
+  public getVersion(config: any) {
+    return this.version
   }
 }

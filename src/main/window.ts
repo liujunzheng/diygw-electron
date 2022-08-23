@@ -50,9 +50,11 @@ export async function createWindow() {
     }
   })
 
-  const URL = isDev
-    ? process.env.DS_RENDERER_URL
-    : `file://${path.join(app.getAppPath(), 'dist/renderer/index.html')}`
+  // const URL = isDev
+  //   ? process.env.DS_RENDERER_URL
+  //   : `file://${path.join(app.getAppPath(), 'dist/renderer/index.html')}`
+
+  const URL = isDev ? 'http://localhost:9091': 'https://www.diygw.com'
 
   mainWin.loadURL(URL)
 

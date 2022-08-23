@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { join } from 'path'
 import { VitePluginDoubleshot } from 'vite-plugin-doubleshot'
-
+const version = process.env.npm_package_version
 // https://vitejs.dev/config/
 export default defineConfig({
   root: join(__dirname, 'src/renderer'),
@@ -15,6 +15,11 @@ export default defineConfig({
       entry: 'src/main/index.ts',
       outDir: 'dist/main',
       external: ['electron'],
+      tsupConfig: {
+        env: {
+          VERSION: `${version}`
+        }
+      },
       electron: {
         build: {
           config: './electron-builder.config.js',
@@ -26,9 +31,9 @@ export default defineConfig({
       },
     }),
   ],
-  server: {
-    port: 9091
-  },
+  // server: {
+  //   port: 9091
+  // },
   build: {
     outDir: join(__dirname, 'dist/renderer'),
     emptyOutDir: true,
