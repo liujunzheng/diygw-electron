@@ -1117,10 +1117,10 @@ duplexer3@^0.1.4:
   resolved "https://registry.npmmirror.com/duplexer3/-/duplexer3-0.1.5.tgz#0b5e4d7bad5de8901ea4440624c8e1d20099217e"
   integrity sha512-1A8za6ws41LQgv9HrE/66jyC5yuSjQ3L/KOpFtoBilsAK2iA2wuS5rTt1OCzIvtS2V7nVmedsUU+DGRcjBmOYA==
 
-einf@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/einf/-/einf-1.0.0.tgz#9540467aedd384e6481737e0d78befb6855be323"
-  integrity sha512-dGesSFAHBAL3mTK51gUN8P+wTfgvATUXz1TDybRMfPiE1t/KwRBZhXozDXAw8pnDh5CySKUGPLZpAuUZfyHFlA==
+einf@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/einf/-/einf-1.1.0.tgz#3280379321c6a7cee6c8c9789c0a3dd3372d2e34"
+  integrity sha512-lTflMrSKGKWPc7QjBhB2Z4leT5/H2Ss/rEM+hTcdEnn3jHcZUPbjUY/pT5TbGETWw6lgYjgrk2/EBDRI6GlcdA==
   dependencies:
     check-package-exists "^1.1.0"
     colorette "^2.0.19"
