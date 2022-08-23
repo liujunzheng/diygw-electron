@@ -1,4 +1,4 @@
-import { Controller, IpcInvoke, Window } from 'einf'
+import { Controller, IpcHandle, IpcOn, Window } from 'einf'
 import { BrowserWindow, dialog } from 'electron'
 import { factory, Conf as JsonConf } from 'electron-json-config'
 import fse from 'fs-extra'
@@ -19,7 +19,7 @@ export class AppController {
    * 打开uniapp调试窗口 或者 重新加载窗口
    * @param config 
    */
-  @IpcInvoke('diygw-open-uniapp')
+  @IpcOn('diygw-open-uniapp')
   public openUniapp(config: any) {
     const data: any = this.dbConfig.get(config.id)
     if (data.url) {
@@ -54,7 +54,7 @@ export class AppController {
   /**
    * 切换页面刷新页面
    */
-  @IpcInvoke('diygw-change-uniapp')
+  @IpcOn('diygw-change-uniapp')
   public changeUniapp(config: any) {
     const data: any = this.dbConfig.get(config.id)
     if (data.url && this.uniappWin) {
@@ -77,7 +77,7 @@ export class AppController {
   /**
    * 获取配置
    */
-  @IpcInvoke('diygw-get-config')
+  @IpcHandle('diygw-get-config')
   public getConfig(id: any) {
     return this.dbConfig.get(id)
   }
@@ -85,7 +85,7 @@ export class AppController {
   /**
   * 设置配置
   */
-  @IpcInvoke('diygw-set-config')
+  @IpcHandle('diygw-set-config')
   public setConfig(config: any) {
     this.dbConfig.set(config.id, config)
     return true
@@ -94,7 +94,7 @@ export class AppController {
   /**
    * 获取当前源码配置的目录
    */
-  @IpcInvoke('diygw-select-dir')
+  @IpcHandle('diygw-select-dir')
   public selectDir(config: any) {
     const filePaths = dialog.showOpenDialogSync({
       properties: ['openDirectory', 'createDirectory']
@@ -129,7 +129,7 @@ export class AppController {
   /**
    * 下载文件
    */
-  @IpcInvoke('diygw-down-file')
+  @IpcOn('diygw-down-file')
   public async downloadFile({ url }: any) {
     const win: any = BrowserWindow.getFocusedWindow();
     await download(win, url, {
@@ -140,7 +140,7 @@ export class AppController {
   /**
    * 获取当前源码配置的目录
    */
-  @IpcInvoke('diygw-save-code')
+  @IpcHandle('diygw-save-code')
   public async saveCode(config: any) {
     const data: any = this.dbConfig.get(config.id)
     //判断是否移动端配置,如果非移动端的都直接返回
