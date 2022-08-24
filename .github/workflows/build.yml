@@ -1,5 +1,5 @@
 # 此工作流的名字
-name: build
+name: Build
 # 自动执行
 on:
   push:
@@ -11,12 +11,10 @@ on:
       - main
 # 工作/任务，这里的工作是可以并行的。
 jobs:
-  release:
+  # 工作的名称“编译windows版”
+  buildwin:
     # 运行的操作系统 windows server latest
-    runs-on: ${{ matrix.os }}
-      strategy:
-        matrix:
-          os: [ windows-latest ]
+    runs-on: windows-latest
     # 步骤
     steps:
       # 使用预制action：拉取最新的代码
@@ -38,13 +36,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.os }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-      # 步骤四的名称：将编译后的结果上传
-      - name: release
-          uses: softprops/action-gh-release@v1
-          if: startsWith(github.ref, 'refs/tags/')
-          with:
-            files: "dist_electron/**"
-          env:
-            GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          path: dist_electron
