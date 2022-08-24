@@ -1,39 +1,31 @@
-# 此工作流的名字
-name: Build
-# 自动执行
-on:
-  push:
-    branches:
-      - main
+name: Build/release
 
-  pull_request:
-    branches:
-      - main
-# 工作/任务，这里的工作是可以并行的。
+on: push
+
 jobs:
-  # 工作的名称“编译windows版”
-  buildwin:
-    # 运行的操作系统 windows server latest
-    runs-on: windows-latest
-    # 步骤
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
     steps:
-      # 使用预制action：拉取最新的代码
-      - uses: actions/checkout@v3
-      # 步骤一的名称：
-      - name: Install and Build
-        # 该步骤运行的终端命令，进入仓库的目录，安装依赖，运行编译命令
-        run:
-          yarn && yarn build
-        env:
-          GH_TOKEN: ${{ secrets.GIT_TOKEN }}
-      # 步骤二的名称：删除dist_electron除了exe的文件
-      - name: cleanup artifacts
-        run:
-          npx rimraf "dist_electron/!(*.exe)"
-      # 步骤三的名称：将编译后的结果上传
-      - name: Upload File
-        # 使用预制action：上传文件，可以将执行路径打包成zip上传
-        uses: actions/upload-artifact@v2
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
         with:
-          name: ${{ matrix.os }}
-          path: dist_electron
+          node-version: 16
+
+      - name: Build/release Electron app
+        uses: wenwuwu/action-electron-forge@v1.4.0
+        with:
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
