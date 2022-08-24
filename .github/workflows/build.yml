@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           # 自动构建GH_TOKEN
-          github_token: ${{ secrets.github_token }}
+          GH_TOKEN: ${{ secrets.github_token }}
           # 上传后文件的名称
           name: windows
           # 打包的路径以及文件过滤，此为仅打包dist目录下的exe文件
@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           # 自动构建GH_TOKEN
-          github_token: ${{ secrets.github_token }}
+          GH_TOKEN: ${{ secrets.github_token }}
           # 上传后文件的名称
           name: mac
           # 打包的路径以及文件过滤，此为仅打包dist目录下的dmg文件
