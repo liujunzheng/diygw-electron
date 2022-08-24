@@ -11,14 +11,13 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v1
-
-      - name: Install Node.js, NPM and Yarn
-        uses: actions/setup-node@v1
-        with:
-          node-version: 10
-
+      # 使用预制action：拉取最新的代码
+      - uses: actions/checkout@v3
+      # 步骤一的名称：
+      - name: Install and Build
+        # 该步骤运行的终端命令，进入仓库的目录，安装依赖，运行编译命令
+        run:
+          yarn
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
         with:
