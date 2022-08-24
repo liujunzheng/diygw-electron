@@ -1,5 +1,5 @@
 # 此工作流的名字
-name: Build
+name: build
 # 自动执行
 on:
   push:
@@ -11,8 +11,7 @@ on:
       - main
 # 工作/任务，这里的工作是可以并行的。
 jobs:
-  # 工作的名称“编译windows版”
-  buildwin:
+  release:
     # 运行的操作系统 windows server latest
     runs-on: ${{ matrix.os }}
       strategy:
