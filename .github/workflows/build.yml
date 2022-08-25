@@ -1,20 +1,15 @@
-# 此工作流的名字
-name: Build
-# 自动执行
-on:
-  push:
-    branches:
-      - main
+name: build
 
-  pull_request:
-    branches:
-      - main
-# 工作/任务，这里的工作是可以并行的。
+on: push
+
 jobs:
-  # 工作的名称“编译windows版”
-  buildwin:
-    # 运行的操作系统 windows server latest
-    runs-on: windows-latest
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+
     # 步骤
     steps:
       # 使用预制action：拉取最新的代码
