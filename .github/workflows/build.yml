@@ -17,11 +17,6 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v3
 
-      - name: Delete
-        uses: ame-yu/action-delete-latest-release@v2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v3
         with:
