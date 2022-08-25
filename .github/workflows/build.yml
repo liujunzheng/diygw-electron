@@ -15,13 +15,9 @@ jobs:
       # 使用预制action：拉取最新的代码
       - uses: actions/checkout@v3
       - name: Delete exist release
-      - uses: actions/github-script@v4
+        uses: ame-yu/action-delete-latest-release@v2
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const { owner, repo } = context.repo
-            const { data: { id } } = await github.repos.getLatestRelease({ owner, repo })
-            await github.repos.deleteRelease({ owner, repo, release_id: id })
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       # 步骤一的名称：
       - name: Install and Build
         # 该步骤运行的终端命令，进入仓库的目录，安装依赖，运行编译命令
