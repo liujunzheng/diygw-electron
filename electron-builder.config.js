@@ -6,9 +6,9 @@ const config = {
   appId: "com.diygw.electron",
   productName: "DIY可视化",
   copyright: "Copyright © 2022 diygw",
-  electronDownload: {
-    mirror: 'https://npm.taobao.org/mirrors/electron/',
-  },
+  // electronDownload: {
+  //   mirror: 'https://npm.taobao.org/mirrors/electron/',
+  // },
   publish:{
     provider: "github",
     releaseType:'release'
