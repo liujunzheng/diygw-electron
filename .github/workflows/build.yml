@@ -1,4 +1,4 @@
-name: build
+name: Build/release
 
 on:
   push:
@@ -13,17 +13,27 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
-    # 步骤
     steps:
-      # 使用预制action：拉取最新的代码
-      - uses: actions/checkout@v3
-      - name: Delete exist release
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Delete
         uses: ame-yu/action-delete-latest-release@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      # 步骤一的名称：
-      - name: Install and Build
-        # 该步骤运行的终端命令，进入仓库的目录，安装依赖，运行编译命令
-        run: yarn && yarn release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
