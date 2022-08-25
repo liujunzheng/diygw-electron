@@ -9,6 +9,10 @@ const config = {
   electronDownload: {
     mirror: 'https://npm.taobao.org/mirrors/electron/',
   },
+  publish:{
+    provider: "github",
+    releaseType:'release'
+  },
   directories: {
     output: 'dist_electron'
   },
